@@ -1,34 +1,8 @@
-package main
+package itertools
 
 import (
-	"fmt"
 	"iter"
 )
-
-func main() {
-	for x := range Take(Count(), 10) {
-		fmt.Println(x)
-	}
-	fmt.Println()
-
-	for y := range NewSeq(5, 4, 3, 2, 1) {
-		fmt.Println(y)
-	}
-	fmt.Println()
-
-	together := Chain[int](Take(Count(), 5), NewSeq(5, 4, 3, 2, 1))
-	for a := range Take(together, 7) {
-		fmt.Println(a)
-	}
-
-	for q := range Take(Cycle(NewSeq("a", "b", "c")), 10) {
-		fmt.Println(q)
-	}
-
-	for q := range Take(Repeat("X", -1), 2) {
-		fmt.Println(q)
-	}
-}
 
 func NewSeq[T any](vals ...T) iter.Seq[T] {
 	return func(yield func(T) bool) {
