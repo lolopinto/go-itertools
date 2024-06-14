@@ -11,17 +11,17 @@ func main() {
 	}
 	fmt.Println()
 
-	for y := range ToSeq([]int{5, 4, 3, 2, 1}) {
+	for y := range NewSeq(5, 4, 3, 2, 1) {
 		fmt.Println(y)
 	}
 	fmt.Println()
 
-	together := Chain[int](Take(Count(), 5), ToSeq([]int{5, 4, 3, 2, 1}))
+	together := Chain[int](Take(Count(), 5), NewSeq(5, 4, 3, 2, 1))
 	for a := range Take(together, 7) {
 		fmt.Println(a)
 	}
 
-	for q := range Take(Cycle(ToSeq([]string{"a", "b", "c"})), 10) {
+	for q := range Take(Cycle(NewSeq("a", "b", "c")), 10) {
 		fmt.Println(q)
 	}
 
@@ -30,7 +30,7 @@ func main() {
 	}
 }
 
-func ToSeq[T any](vals []T) iter.Seq[T] {
+func NewSeq[T any](vals ...T) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for i := 0; i < len(vals); i++ {
 			if !yield(vals[i]) {
