@@ -20,15 +20,13 @@ func main() {
 	for a := range Take(together, 7) {
 		fmt.Println(a)
 	}
-}
 
-func Count() iter.Seq[int] {
-	return func(yield func(int) bool) {
-		for i := 0; ; i++ {
-			if !yield(i + 1) {
-				return
-			}
-		}
+	for q := range Take(Cycle(ToSeq([]string{"a", "b", "c"})), 10) {
+		fmt.Println(q)
+	}
+
+	for q := range Take(Repeat("X", -1), 2) {
+		fmt.Println(q)
 	}
 }
 
