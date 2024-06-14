@@ -41,3 +41,24 @@ func assertMatch(t *testing.T, gotSeq iter.Seq[int], want []int) {
 func TestNewSeq(t *testing.T) {
 	assertMatch(t, NewSeq(1, 2, 3), []int{1, 2, 3})
 }
+
+func TestTake(t *testing.T) {
+	assertMatch(t, Take(NewSeq(1, 2, 3), 0), []int{})
+	assertMatch(t, Take(NewSeq(1, 2, 3, 4, 5, 6), 3), []int{1, 2, 3})
+}
+
+func TestChain(t *testing.T) {
+	assertMatch(t, Chain(NewSeq(1, 2, 3), NewSeq(4, 5, 6)), []int{1, 2, 3, 4, 5, 6})
+}
+
+func TestCount(t *testing.T) {
+	assertMatch(t, Take(Count(), 3), []int{0, 1, 2})
+}
+
+func TestCycle(t *testing.T) {
+	assertMatch(t, Take(Cycle(NewSeq(1, 2, 3)), 5), []int{1, 2, 3, 1, 2})
+}
+
+func TestRepeat(t *testing.T) {
+	assertMatch(t, Repeat(1, 5), []int{1, 1, 1, 1, 1})
+}

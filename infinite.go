@@ -5,7 +5,7 @@ import "iter"
 func Count() iter.Seq[int] {
 	return func(yield func(int) bool) {
 		for i := 0; ; i++ {
-			if !yield(i + 1) {
+			if !yield(i) {
 				return
 			}
 		}
