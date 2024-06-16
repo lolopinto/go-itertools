@@ -3,6 +3,8 @@ package itertools
 import (
 	"iter"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func toSlice[T any](s iter.Seq[T]) []T {
@@ -23,42 +25,47 @@ func toSlice[T any](s iter.Seq[T]) []T {
 	return out
 }
 
-// TODO (astonm): Figure out how to make assertMatch work generically
-func assertMatch(t *testing.T, gotSeq iter.Seq[int], want []int) {
+func assertSequenceMatch[V any](t *testing.T, gotSeq iter.Seq[V], want []V) {
 	got := toSlice(gotSeq)
-
-	if len(want) != len(got) {
-		t.Fatalf("expected %v, got %v", want, got)
-	}
-
-	for i := 0; i < len(got); i++ {
-		if want[i] != got[i] {
-			t.Fatalf("expected %v, got %v", want, got)
-		}
-	}
+	assert.Equal(t, want, got)
 }
 
 func TestNewSeq(t *testing.T) {
-	assertMatch(t, NewSeq(1, 2, 3), []int{1, 2, 3})
+	assertSequenceMatch(t, NewSeq(1, 2, 3), []int{1, 2, 3})
 }
 
 func TestTake(t *testing.T) {
-	assertMatch(t, Take(NewSeq(1, 2, 3), 0), []int{})
-	assertMatch(t, Take(NewSeq(1, 2, 3, 4, 5, 6), 3), []int{1, 2, 3})
+	assertSequenceMatch(t, Take(NewSeq(1, 2, 3), 0), []int{})
+	assertSequenceMatch(t, Take(NewSeq(1, 2, 3, 4, 5, 6), 3), []int{1, 2, 3})
 }
 
 func TestChain(t *testing.T) {
-	assertMatch(t, Chain(NewSeq(1, 2, 3), NewSeq(4, 5, 6)), []int{1, 2, 3, 4, 5, 6})
+	assertSequenceMatch(t,
+		Chain(NewSeq(1, 2, 3), NewSeq(4, 5, 6)),
+		[]int{1, 2, 3, 4, 5, 6},
+	)
 }
 
 func TestCount(t *testing.T) {
-	assertMatch(t, Take(Count(), 3), []int{0, 1, 2})
+	assertSequenceMatch(t, Take(Count(), 3), []int{0, 1, 2})
 }
 
 func TestCycle(t *testing.T) {
-	assertMatch(t, Take(Cycle(NewSeq(1, 2, 3)), 5), []int{1, 2, 3, 1, 2})
+	assertSequenceMatch(t, Take(Cycle(NewSeq(1, 2, 3)), 5), []int{1, 2, 3, 1, 2})
 }
 
 func TestRepeat(t *testing.T) {
-	assertMatch(t, Repeat(1, 5), []int{1, 1, 1, 1, 1})
+	assertSequenceMatch(t, Repeat("a", 5), []string{"a", "a", "a", "a", "a"})
+}
+
+func TestAccumulate(t *testing.T) {
+	runningSums := Accumulate(NewSeq(1, 2, 3), func(x, y int) int { return x + y })
+	assertSequenceMatch(t, runningSums, []int{1, 3, 6})
+}
+
+func TestBatched(t *testing.T) {
+	assertSequenceMatch(t,
+		Batched(NewSeq(1, 2, 3, 4, 5, 6, 7, 8), 3),
+		[][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8}},
+	)
 }

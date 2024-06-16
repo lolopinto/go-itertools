@@ -68,3 +68,36 @@ func Repeat[T any](val T, n int) iter.Seq[T] {
 
 	}
 }
+
+func Accumulate[T any](s iter.Seq[T], op func(T, T) T) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var sum T
+		for v := range s {
+			sum = op(sum, v)
+			if !yield(sum) {
+				return
+			}
+		}
+	}
+}
+
+func Batched[T any](s iter.Seq[T], n int) iter.Seq[[]T] {
+	return func(yield func([]T) bool) {
+		batch := make([]T, 0, n)
+
+		for v := range s {
+			if len(batch) == n {
+				if !yield(batch) {
+					return
+				}
+				batch = make([]T, 0, n)
+			}
+
+			batch = append(batch, v)
+		}
+
+		if len(batch) > 0 {
+			yield(batch)
+		}
+	}
+}
