@@ -101,3 +101,48 @@ func Batched[T any](s iter.Seq[T], n int) iter.Seq[[]T] {
 		}
 	}
 }
+
+func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
+	pick := func(indices []int) []T {
+		out := make([]T, 0, len(indices))
+		for _, i := range indices {
+			out = append(out, vals[i])
+		}
+		return out
+	}
+
+	return func(yield func([]T) bool) {
+		if r > len(vals) {
+			return
+		}
+
+		indices := make([]int, 0, r)
+		for i := range r {
+			indices = append(indices, i)
+		}
+
+		yield(pick(indices))
+
+		for {
+			var i int
+			var found bool
+			for i = r - 1; i >= 0; i-- {
+				if indices[i] != i+len(vals)-r {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				return
+			}
+
+			indices[i]++
+			for j := i + 1; j < r; j++ {
+				indices[j] = indices[j-1] + 1
+			}
+
+			yield(pick(indices))
+		}
+	}
+}

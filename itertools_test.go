@@ -69,3 +69,14 @@ func TestBatched(t *testing.T) {
 		[][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8}},
 	)
 }
+
+func TestCombinations(t *testing.T) {
+	assertSequenceMatch(t,
+		Combinations([]string{"A", "B", "C", "D"}, 2),
+		[][]string{[]string{"A", "B"}, []string{"A", "C"}, []string{"A", "D"}, []string{"B", "C"}, []string{"B", "D"}, []string{"C", "D"}},
+	)
+	assertSequenceMatch(t,
+		Combinations([]int{0, 1, 2, 3}, 3),
+		[][]int{[]int{0, 1, 2}, []int{0, 1, 3}, []int{0, 2, 3}, []int{1, 2, 3}},
+	)
+}
