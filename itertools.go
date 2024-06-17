@@ -146,3 +146,44 @@ func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
 		}
 	}
 }
+
+func CombinationsWithReplacement[T any](vals []T, r int) iter.Seq[[]T] {
+	pick := func(indices []int) []T {
+		out := make([]T, 0, len(indices))
+		for _, i := range indices {
+			out = append(out, vals[i])
+		}
+		return out
+	}
+
+	return func(yield func([]T) bool) {
+		if len(vals) == 0 && r == 0 {
+			return
+		}
+
+		indices := make([]int, r)
+
+		yield(pick(indices))
+		for {
+			var i int
+			var found bool
+			for i = r - 1; i >= 0; i-- {
+				if indices[i] != len(vals)-1 {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				return
+			}
+
+			nextIndex := indices[i] + 1
+			for j := i; j < r; j++ {
+				indices[j] = nextIndex
+			}
+
+			yield(pick(indices))
+		}
+	}
+}

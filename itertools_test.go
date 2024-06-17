@@ -80,3 +80,10 @@ func TestCombinations(t *testing.T) {
 		[][]int{[]int{0, 1, 2}, []int{0, 1, 3}, []int{0, 2, 3}, []int{1, 2, 3}},
 	)
 }
+
+func TestCombinationsWithReplacement(t *testing.T) {
+	assertSequenceMatch(t,
+		CombinationsWithReplacement([]string{"A", "B", "C"}, 2),
+		[][]string{[]string{"A", "A"}, []string{"A", "B"}, []string{"A", "C"}, []string{"B", "B"}, []string{"B", "C"}, []string{"C", "C"}},
+	)
+}
