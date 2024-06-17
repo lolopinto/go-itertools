@@ -34,6 +34,16 @@ func TestNewSeq(t *testing.T) {
 	assertSequenceMatch(t, NewSeq(1, 2, 3), []int{1, 2, 3})
 }
 
+func TestEnumerate(t *testing.T) {
+	keys := make([]int, 0)
+	vals := make([]int, 0)
+	for k, v := range Enumerate(NewSeq(0, 1, 2, 3)) {
+		keys = append(keys, k)
+		vals = append(vals, v)
+	}
+	assert.Equal(t, keys, vals)
+}
+
 func TestTake(t *testing.T) {
 	assertSequenceMatch(t, Take(NewSeq(1, 2, 3), 0), []int{})
 	assertSequenceMatch(t, Take(NewSeq(1, 2, 3, 4, 5, 6), 3), []int{1, 2, 3})

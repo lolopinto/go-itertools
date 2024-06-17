@@ -14,6 +14,18 @@ func NewSeq[T any](vals ...T) iter.Seq[T] {
 	}
 }
 
+func Enumerate[T any](s iter.Seq[T]) iter.Seq2[int, T] {
+	return func(yield func(int, T) bool) {
+		var i int
+		for v := range s {
+			if !yield(i, v) {
+				return
+			}
+			i++
+		}
+	}
+}
+
 func Take[T any](s iter.Seq[T], n int) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		next, stop := iter.Pull(s)
