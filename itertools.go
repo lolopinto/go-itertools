@@ -216,3 +216,19 @@ func Compress[T any, C comparable](s iter.Seq[T], selectors []C) iter.Seq[T] {
 		}
 	}
 }
+
+func DropWhile[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var shouldYield bool
+		for v := range s {
+			if !pred(v) {
+				shouldYield = true
+			}
+			if shouldYield {
+				if !yield(v) {
+					return
+				}
+			}
+		}
+	}
+}

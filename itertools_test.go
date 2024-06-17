@@ -109,3 +109,10 @@ func TestCompress(t *testing.T) {
 		[]int{1, 3, 5},
 	)
 }
+
+func TestDropWhile(t *testing.T) {
+	assertSequenceMatch(t,
+		DropWhile(func(x int) bool { return x < 5 }, NewSeq(1, 4, 6, 3, 8)),
+		[]int{6, 3, 8},
+	)
+}
