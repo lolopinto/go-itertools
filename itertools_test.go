@@ -116,3 +116,10 @@ func TestDropWhile(t *testing.T) {
 		[]int{6, 3, 8},
 	)
 }
+
+func TestFilterFalse(t *testing.T) {
+	assertSequenceMatch(t,
+		FilterFalse(func(x int) bool { return x < 5 }, NewSeq(1, 4, 6, 3, 8)),
+		[]int{6, 8},
+	)
+}

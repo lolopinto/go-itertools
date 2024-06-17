@@ -232,3 +232,15 @@ func DropWhile[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
 		}
 	}
 }
+
+func FilterFalse[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for v := range s {
+			if !pred(v) {
+				if !yield(v) {
+					return
+				}
+			}
+		}
+	}
+}
