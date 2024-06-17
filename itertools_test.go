@@ -97,3 +97,15 @@ func TestCombinationsWithReplacement(t *testing.T) {
 		[][]string{[]string{"A", "A"}, []string{"A", "B"}, []string{"A", "C"}, []string{"B", "B"}, []string{"B", "C"}, []string{"C", "C"}},
 	)
 }
+
+func TestCompress(t *testing.T) {
+	assertSequenceMatch(t,
+		Compress(NewSeq([]rune("ABCDEFG")...), []int{1, 0, 1, 0, 1, 1}),
+		[]rune("ACEF"),
+	)
+
+	assertSequenceMatch(t,
+		Compress(Count(), []bool{false, true, false, true, false, true}),
+		[]int{1, 3, 5},
+	)
+}

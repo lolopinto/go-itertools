@@ -199,3 +199,20 @@ func CombinationsWithReplacement[T any](vals []T, r int) iter.Seq[[]T] {
 		}
 	}
 }
+
+func Compress[T any, C comparable](s iter.Seq[T], selectors []C) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var zero C
+		for i, v := range Enumerate(s) {
+			if i >= len(selectors) {
+				return
+			}
+
+			if selectors[i] != zero {
+				if !yield(v) {
+					return
+				}
+			}
+		}
+	}
+}
