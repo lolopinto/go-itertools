@@ -1,4 +1,4 @@
 version: '3'
 tasks:
-  default: task run
-  run: go test *.go
+  default: task test
+  test: go test *.go
