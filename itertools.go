@@ -336,3 +336,53 @@ func Pairwise[T any](s iter.Seq[T]) iter.Seq2[T, T] {
 		}
 	}
 }
+
+func Permutations[T any](vals []T, r int) iter.Seq[[]T] {
+	return func(yield func([]T) bool) {
+		n := len(vals)
+		if r > n {
+			return
+		}
+
+		indices := make([]int, 0, n)
+		for i := range n {
+			indices = append(indices, i)
+		}
+
+		cycles := make([]int, 0, r)
+		for i := n; i > n-r; i-- {
+			cycles = append(cycles, i)
+		}
+
+		yield(pick(vals, indices[:r]))
+
+		if n == 0 {
+			return
+		}
+
+		for {
+			var i int
+			var found bool
+			for i = r - 1; i >= 0; i-- {
+				cycles[i]--
+				if cycles[i] == 0 {
+					// move to end and reset
+					ind := indices[i]
+					indices = append(append(indices[:i], indices[i+1:]...), ind)
+					cycles[i] = n - i
+				} else {
+					j := n - cycles[i]
+					indices[i], indices[j] = indices[j], indices[i]
+
+					yield(pick(vals, indices[:r]))
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				return
+			}
+		}
+	}
+}

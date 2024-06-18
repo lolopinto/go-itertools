@@ -159,3 +159,35 @@ func TestPairwise(t *testing.T) {
 		i++
 	}
 }
+
+func TestPermutations(t *testing.T) {
+	assertSequenceMatch(t,
+		Permutations([]string{"A", "B", "C", "D"}, 2),
+		[][]string{
+			{"A", "B"},
+			{"A", "C"},
+			{"A", "D"},
+			{"B", "A"},
+			{"B", "C"},
+			{"B", "D"},
+			{"C", "A"},
+			{"C", "B"},
+			{"C", "D"},
+			{"D", "A"},
+			{"D", "B"},
+			{"D", "C"},
+		},
+	)
+
+	assertSequenceMatch(t,
+		Permutations([]int{0, 1, 2}, 3),
+		[][]int{
+			{0, 1, 2},
+			{0, 2, 1},
+			{1, 0, 2},
+			{1, 2, 0},
+			{2, 0, 1},
+			{2, 1, 0},
+		},
+	)
+}
