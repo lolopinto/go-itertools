@@ -136,3 +136,15 @@ func TestGroupBy(t *testing.T) {
 		assertSequenceMatch(t, g, want[k])
 	}
 }
+
+func TestSlice(t *testing.T) {
+	assertSequenceMatch(t,
+		Slice(NewSeq([]rune("ABCDEFG")...), 2, 4),
+		[]rune("CD"),
+	)
+
+	assertSequenceMatch(t,
+		Slice(NewSeq([]rune("ABCDEFG")...), 2, -1),
+		[]rune("CDEFG"),
+	)
+}

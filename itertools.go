@@ -308,3 +308,17 @@ func GroupBy[T comparable](s iter.Seq[T]) iter.Seq2[T, iter.Seq[T]] {
 		}
 	}
 }
+
+func Slice[T any](s iter.Seq[T], start, end int) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		var i int
+		for v := range s {
+			if i >= start && (end < 0 || i < end) {
+				if !yield(v) {
+					return
+				}
+			}
+			i++
+		}
+	}
+}
