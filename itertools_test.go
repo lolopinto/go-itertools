@@ -123,3 +123,16 @@ func TestFilterFalse(t *testing.T) {
 		[]int{6, 8},
 	)
 }
+
+func TestGroupBy(t *testing.T) {
+	want := map[string][]string{
+		"A": []string{"A", "A", "A", "A"},
+		"B": []string{"B", "B", "B"},
+		"C": []string{"C", "C"},
+		"D": []string{"D"},
+	}
+
+	for k, g := range GroupBy(NewSeq("A", "A", "A", "A", "B", "B", "B", "C", "C", "D")) {
+		assertSequenceMatch(t, g, want[k])
+	}
+}

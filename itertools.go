@@ -244,3 +244,67 @@ func FilterFalse[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
 		}
 	}
 }
+
+func GroupBy[T comparable](s iter.Seq[T]) iter.Seq2[T, iter.Seq[T]] {
+	return func(yield func(T, iter.Seq[T]) bool) {
+		next, stop := iter.Pull(s)
+		defer stop()
+
+		var current T
+		var ok bool
+
+		pullGroup := func(groupValue T) iter.Seq[T] {
+			return func(yield func(T) bool) {
+				if !yield(groupValue) {
+					return
+				}
+
+				var v T
+				for {
+					v, ok = next()
+					if !ok {
+						return
+					}
+
+					if v != groupValue {
+						current = v
+						return
+					}
+
+					if !yield(v) {
+						return
+					}
+				}
+			}
+		}
+
+		current, ok = next()
+		if !ok {
+			return
+		}
+
+		for {
+			group := pullGroup(current)
+			if !ok {
+				return
+			}
+
+			if !yield(current, group) {
+				return
+			}
+
+			// exhaust remaining group items before moving to next group
+			var v T
+			for {
+				v, ok = next()
+				if !ok {
+					return
+				}
+				if v != current {
+					current = v
+					return
+				}
+			}
+		}
+	}
+}
