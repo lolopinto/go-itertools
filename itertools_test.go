@@ -76,25 +76,25 @@ func TestAccumulate(t *testing.T) {
 func TestBatched(t *testing.T) {
 	assertSequenceMatch(t,
 		Batched(NewSeq(1, 2, 3, 4, 5, 6, 7, 8), 3),
-		[][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8}},
+		[][]int{{1, 2, 3}, {4, 5, 6}, {7, 8}},
 	)
 }
 
 func TestCombinations(t *testing.T) {
 	assertSequenceMatch(t,
 		Combinations([]string{"A", "B", "C", "D"}, 2),
-		[][]string{[]string{"A", "B"}, []string{"A", "C"}, []string{"A", "D"}, []string{"B", "C"}, []string{"B", "D"}, []string{"C", "D"}},
+		[][]string{{"A", "B"}, {"A", "C"}, {"A", "D"}, {"B", "C"}, {"B", "D"}, {"C", "D"}},
 	)
 	assertSequenceMatch(t,
 		Combinations([]int{0, 1, 2, 3}, 3),
-		[][]int{[]int{0, 1, 2}, []int{0, 1, 3}, []int{0, 2, 3}, []int{1, 2, 3}},
+		[][]int{{0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}},
 	)
 }
 
 func TestCombinationsWithReplacement(t *testing.T) {
 	assertSequenceMatch(t,
 		CombinationsWithReplacement([]string{"A", "B", "C"}, 2),
-		[][]string{[]string{"A", "A"}, []string{"A", "B"}, []string{"A", "C"}, []string{"B", "B"}, []string{"B", "C"}, []string{"C", "C"}},
+		[][]string{{"A", "A"}, {"A", "B"}, {"A", "C"}, {"B", "B"}, {"B", "C"}, {"C", "C"}},
 	)
 }
 
