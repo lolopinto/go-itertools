@@ -100,8 +100,8 @@ func TestCombinationsWithReplacement(t *testing.T) {
 
 func TestCompress(t *testing.T) {
 	assertSequenceMatch(t,
-		Compress(NewSeq([]rune("ABCDEFG")...), []int{1, 0, 1, 0, 1, 1}),
-		[]rune("ACEF"),
+		Compress(NewSeq([]byte("ABCDEFG")...), []int{1, 0, 1, 0, 1, 1}),
+		[]byte("ACEF"),
 	)
 
 	assertSequenceMatch(t,
@@ -139,13 +139,13 @@ func TestGroupBy(t *testing.T) {
 
 func TestSlice(t *testing.T) {
 	assertSequenceMatch(t,
-		Slice(NewSeq([]rune("ABCDEFG")...), 2, 4),
-		[]rune("CD"),
+		Slice(NewSeq([]byte("ABCDEFG")...), 2, 4),
+		[]byte("CD"),
 	)
 
 	assertSequenceMatch(t,
-		Slice(NewSeq([]rune("ABCDEFG")...), 2, -1),
-		[]rune("CDEFG"),
+		Slice(NewSeq([]byte("ABCDEFG")...), 2, -1),
+		[]byte("CDEFG"),
 	)
 }
 
@@ -153,10 +153,9 @@ func TestPairwise(t *testing.T) {
 	want := []string{"AB", "BC", "CD", "DE", "EF", "FG"}
 
 	var i int
-	for x, y := range Pairwise(NewSeq([]rune("ABCDEFG")...)) {
-		w := []rune(want[i])
-		assert.Equal(t, x, w[0])
-		assert.Equal(t, y, w[1])
+	for x, y := range Pairwise(NewSeq([]byte("ABCDEFG")...)) {
+		assert.Equal(t, x, want[i][0])
+		assert.Equal(t, y, want[i][1])
 		i++
 	}
 }
