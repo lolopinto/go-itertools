@@ -322,3 +322,25 @@ func Slice[T any](s iter.Seq[T], start, end int) iter.Seq[T] {
 		}
 	}
 }
+
+func Pairwise[T any](s iter.Seq[T]) iter.Seq2[T, T] {
+	return func(yield func(T, T) bool) {
+		next, stop := iter.Pull(s)
+		defer stop()
+
+		a, ok := next()
+		if !ok {
+			return
+		}
+		for {
+			b, ok := next()
+			if !ok {
+				return
+			}
+			if !yield(a, b) {
+				return
+			}
+			a = b
+		}
+	}
+}

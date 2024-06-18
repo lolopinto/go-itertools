@@ -148,3 +148,15 @@ func TestSlice(t *testing.T) {
 		[]rune("CDEFG"),
 	)
 }
+
+func TestPairwise(t *testing.T) {
+	want := []string{"AB", "BC", "CD", "DE", "EF", "FG"}
+
+	var i int
+	for x, y := range Pairwise(NewSeq([]rune("ABCDEFG")...)) {
+		w := []rune(want[i])
+		assert.Equal(t, x, w[0])
+		assert.Equal(t, y, w[1])
+		i++
+	}
+}
