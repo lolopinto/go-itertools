@@ -114,15 +114,15 @@ func Batched[T any](s iter.Seq[T], n int) iter.Seq[[]T] {
 	}
 }
 
-func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
-	pick := func(indices []int) []T {
-		out := make([]T, 0, len(indices))
-		for _, i := range indices {
-			out = append(out, vals[i])
-		}
-		return out
+func pick[T any](vals []T, indices []int) []T {
+	out := make([]T, 0, len(indices))
+	for _, i := range indices {
+		out = append(out, vals[i])
 	}
+	return out
+}
 
+func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
 	return func(yield func([]T) bool) {
 		if r > len(vals) {
 			return
@@ -133,7 +133,7 @@ func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
 			indices = append(indices, i)
 		}
 
-		yield(pick(indices))
+		yield(pick(vals, indices))
 
 		for {
 			var i int
@@ -154,20 +154,12 @@ func Combinations[T any](vals []T, r int) iter.Seq[[]T] {
 				indices[j] = indices[j-1] + 1
 			}
 
-			yield(pick(indices))
+			yield(pick(vals, indices))
 		}
 	}
 }
 
 func CombinationsWithReplacement[T any](vals []T, r int) iter.Seq[[]T] {
-	pick := func(indices []int) []T {
-		out := make([]T, 0, len(indices))
-		for _, i := range indices {
-			out = append(out, vals[i])
-		}
-		return out
-	}
-
 	return func(yield func([]T) bool) {
 		if len(vals) == 0 && r == 0 {
 			return
@@ -175,7 +167,7 @@ func CombinationsWithReplacement[T any](vals []T, r int) iter.Seq[[]T] {
 
 		indices := make([]int, r)
 
-		yield(pick(indices))
+		yield(pick(vals, indices))
 		for {
 			var i int
 			var found bool
@@ -195,7 +187,7 @@ func CombinationsWithReplacement[T any](vals []T, r int) iter.Seq[[]T] {
 				indices[j] = nextIndex
 			}
 
-			yield(pick(indices))
+			yield(pick(vals, indices))
 		}
 	}
 }
