@@ -442,3 +442,13 @@ func ProductRepeat[T any](vals []T, repeat int) iter.Seq[[]T] {
 	}
 	return Product(inputs...)
 }
+
+func TakeWhile[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for v := range s {
+			if !pred(v) || !yield(v) {
+				return
+			}
+		}
+	}
+}

@@ -230,3 +230,10 @@ func TestMap(t *testing.T) {
 		[]byte{'0', '1', '2'},
 	)
 }
+
+func TestTakeWhile(t *testing.T) {
+	assertSequenceMatch(t,
+		TakeWhile(func(x int) bool { return x < 5 }, NewSeq(1, 4, 6, 3, 8)),
+		[]int{1, 4},
+	)
+}
