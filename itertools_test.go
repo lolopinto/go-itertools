@@ -191,3 +191,19 @@ func TestPermutations(t *testing.T) {
 		},
 	)
 }
+
+func TestProduct(t *testing.T) {
+	assertSequenceMatch(t,
+		Product([]byte("ABCD"), []byte("xy")),
+		[][]byte{
+			{'A', 'x'},
+			{'A', 'y'},
+			{'B', 'x'},
+			{'B', 'y'},
+			{'C', 'x'},
+			{'C', 'y'},
+			{'D', 'x'},
+			{'D', 'y'},
+		},
+	)
+}

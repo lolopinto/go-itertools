@@ -2,6 +2,7 @@ package itertools
 
 import (
 	"iter"
+	"slices"
 )
 
 func NewSeq[T any](vals ...T) iter.Seq[T] {
@@ -382,6 +383,43 @@ func Permutations[T any](vals []T, r int) iter.Seq[[]T] {
 
 			if !found {
 				return
+			}
+		}
+	}
+}
+
+func Product[T any](pool ...[]T) iter.Seq[[]T] {
+	return func(yield func([]T) bool) {
+		n := len(pool)
+
+		maxIndices := make([]int, n)
+		for i := range n {
+			maxIndices[i] = len(pool[i]) - 1
+		}
+
+		indices := make([]int, n)
+
+		for {
+			prod := make([]T, n)
+			for i := range n {
+				prod[i] = pool[i][indices[i]]
+			}
+
+			if !yield(prod) {
+				return
+			}
+
+			if slices.Equal(indices, maxIndices) {
+				return
+			}
+
+			for i := n - 1; i >= 0; i-- {
+				if indices[i] < maxIndices[i] {
+					indices[i]++
+					break
+				} else {
+					indices[i] = 0
+				}
 			}
 		}
 	}
