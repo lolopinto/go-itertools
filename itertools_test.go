@@ -223,3 +223,10 @@ func TestProductRepeat(t *testing.T) {
 		},
 	)
 }
+
+func TestMap(t *testing.T) {
+	assertSequenceMatch(t,
+		Map(func(x int) byte { return byte('0' + x) }, NewSeq(0, 1, 2)),
+		[]byte{'0', '1', '2'},
+	)
+}

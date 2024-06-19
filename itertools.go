@@ -27,6 +27,16 @@ func Enumerate[T any](s iter.Seq[T]) iter.Seq2[int, T] {
 	}
 }
 
+func Map[T any, U any](mapper func(T) U, s iter.Seq[T]) iter.Seq[U] {
+	return func(yield func(U) bool) {
+		for v := range s {
+			if !yield(mapper(v)) {
+				return
+			}
+		}
+	}
+}
+
 func Take[T any](s iter.Seq[T], n int) iter.Seq[T] {
 	return func(yield func(T) bool) {
 		next, stop := iter.Pull(s)
