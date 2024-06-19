@@ -424,3 +424,11 @@ func Product[T any](pool ...[]T) iter.Seq[[]T] {
 		}
 	}
 }
+
+func ProductRepeat[T any](vals []T, repeat int) iter.Seq[[]T] {
+	inputs := make([][]T, repeat)
+	for i := range repeat {
+		inputs[i] = vals
+	}
+	return Product(inputs...)
+}

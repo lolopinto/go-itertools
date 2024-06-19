@@ -207,3 +207,19 @@ func TestProduct(t *testing.T) {
 		},
 	)
 }
+
+func TestProductRepeat(t *testing.T) {
+	assertSequenceMatch(t,
+		ProductRepeat([]int{0, 1}, 3),
+		[][]int{
+			{0, 0, 0},
+			{0, 0, 1},
+			{0, 1, 0},
+			{0, 1, 1},
+			{1, 0, 0},
+			{1, 0, 1},
+			{1, 1, 0},
+			{1, 1, 1},
+		},
+	)
+}
