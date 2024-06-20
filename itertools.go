@@ -456,3 +456,10 @@ func TakeWhile[T any](pred func(T) bool, s iter.Seq[T]) iter.Seq[T] {
 		}
 	}
 }
+
+func Tee[T any](s iter.Seq[T], n int) (res []iter.Seq[T]) {
+	for _ = range n {
+		res = append(res, s)
+	}
+	return res
+}

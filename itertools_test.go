@@ -237,3 +237,33 @@ func TestTakeWhile(t *testing.T) {
 		[]int{1, 4},
 	)
 }
+
+func TestTee(t *testing.T) {
+	vals := []int{2, 4, 6, 8}
+	seqs := Tee(OfSlice(vals), 3)
+
+	s0, stop0 := iter.Pull(seqs[0])
+	s1, stop1 := iter.Pull(seqs[1])
+	s2, stop2 := iter.Pull(seqs[2])
+
+	defer stop0()
+	defer stop1()
+	defer stop2()
+
+	for _, v := range vals {
+		var x int
+		var ok bool
+
+		x, ok = s0()
+		assert.True(t, ok)
+		assert.Equal(t, x, v)
+
+		x, ok = s1()
+		assert.True(t, ok)
+		assert.Equal(t, x, v)
+
+		x, ok = s2()
+		assert.True(t, ok)
+		assert.Equal(t, x, v)
+	}
+}
