@@ -276,3 +276,43 @@ func TestZip(t *testing.T) {
 		assert.Equal(t, c, byte('0'+n))
 	}
 }
+
+func TestPullZip3(t *testing.T) {
+	chrs := OfSlice([]byte("2468"))
+	nums := OfSlice([]int{2, 4, 6, 8})
+	flts := OfSlice([]float32{2.0, 4.0, 6.0, 8.0})
+
+	next, stop := PullZip3(chrs, nums, flts)
+	defer stop()
+
+	for {
+		c, n, f, ok := next()
+		if !ok {
+			break
+		}
+
+		assert.Equal(t, c, byte('0'+n))
+		assert.Equal(t, f, float32(n))
+	}
+}
+
+func TestPullZip4(t *testing.T) {
+	mat := []iter.Seq[int]{
+		NewSeq(0, 4, 8, 12),
+		NewSeq(1, 5, 9, 13),
+		NewSeq(2, 6, 10, 14),
+		NewSeq(3, 7, 11, 15),
+	}
+
+	next, stop := PullZip4(mat[0], mat[1], mat[2], mat[3])
+	defer stop()
+
+	for {
+		a, b, c, d, ok := next()
+		if !ok {
+			break
+		}
+
+		assert.Equal(t, []int{a, b, c, d}, []int{a, a + 1, a + 2, a + 3})
+	}
+}

@@ -486,3 +486,50 @@ func Zip[T any, U any](s0 iter.Seq[T], s1 iter.Seq[U]) iter.Seq2[T, U] {
 		}
 	}
 }
+
+func PullZip3[T any, U any, V any](s0 iter.Seq[T], s1 iter.Seq[U], s2 iter.Seq[V]) (func() (T, U, V, bool), func()) {
+	next0, stop0 := iter.Pull(s0)
+	next1, stop1 := iter.Pull(s1)
+	next2, stop2 := iter.Pull(s2)
+
+	next := func() (t T, u U, v V, ok bool) {
+		v0, ok0 := next0()
+		v1, ok1 := next1()
+		v2, ok2 := next2()
+
+		return v0, v1, v2, ok0 && ok1 && ok2
+	}
+
+	stop := func() {
+		stop0()
+		stop1()
+		stop2()
+	}
+
+	return next, stop
+}
+
+func PullZip4[T any, U any, V any, W any](s0 iter.Seq[T], s1 iter.Seq[U], s2 iter.Seq[V], s3 iter.Seq[W]) (func() (T, U, V, W, bool), func()) {
+	next0, stop0 := iter.Pull(s0)
+	next1, stop1 := iter.Pull(s1)
+	next2, stop2 := iter.Pull(s2)
+	next3, stop3 := iter.Pull(s3)
+
+	next := func() (t T, u U, v V, w W, ok bool) {
+		v0, ok0 := next0()
+		v1, ok1 := next1()
+		v2, ok2 := next2()
+		v3, ok3 := next3()
+
+		return v0, v1, v2, v3, ok0 && ok1 && ok2 && ok3
+	}
+
+	stop := func() {
+		stop0()
+		stop1()
+		stop2()
+		stop3()
+	}
+
+	return next, stop
+}
