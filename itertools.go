@@ -463,3 +463,26 @@ func Tee[T any](s iter.Seq[T], n int) (res []iter.Seq[T]) {
 	}
 	return res
 }
+
+func Zip[T any, U any](s0 iter.Seq[T], s1 iter.Seq[U]) iter.Seq2[T, U] {
+	return func(yield func(T, U) bool) {
+		next0, stop0 := iter.Pull(s0)
+		next1, stop1 := iter.Pull(s1)
+
+		defer stop0()
+		defer stop1()
+
+		for {
+			v0, ok0 := next0()
+			v1, ok1 := next1()
+
+			if !ok0 || !ok1 {
+				return
+			}
+
+			if !yield(v0, v1) {
+				return
+			}
+		}
+	}
+}

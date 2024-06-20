@@ -267,3 +267,12 @@ func TestTee(t *testing.T) {
 		assert.Equal(t, x, v)
 	}
 }
+
+func TestZip(t *testing.T) {
+	chrs := OfSlice([]byte("2468"))
+	nums := OfSlice([]int{2, 4, 6, 8})
+
+	for c, n := range Zip(chrs, nums) {
+		assert.Equal(t, c, byte('0'+n))
+	}
+}
